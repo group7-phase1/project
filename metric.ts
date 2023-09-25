@@ -328,7 +328,6 @@ export async function cloneRepository(repositoryUrl: string): Promise<string> {
 export async function rampUp(repositoryUrl: string): Promise<number> {
   try {
     const tempDir = tmp.dirSync({ unsafeCleanup: true, prefix: 'temp-' });
-
     const localDir = await cloneRepository(repositoryUrl);
 
     if (!localDir) {
@@ -344,7 +343,6 @@ export async function rampUp(repositoryUrl: string): Promise<number> {
     let readmeSize = 0;
     for (const readmePath of readmePaths) {
       try {
-
         logger.debug("Getting file size: ", readmePath);
         readmeSize = await getFileSize(readmePath);
         break;
