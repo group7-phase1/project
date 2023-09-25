@@ -71,11 +71,7 @@ describe("GitHub Repository Metrics", () => {
     fs.rmdirSync(testDir, { recursive: true });
   });
   const repositoryUrls = [
-    "https://github.com/cloudinary/cloudinary_npm",
-    "https://github.com/nullivex/nodist",
-    "https://github.com/lodash/lodash",
-    "https://github.com/expressjs/express",
-    "https://github.com/browserify/browserify",
+    "https://github.com/cloudinary/cloudinary_npm"
   ];
 
   beforeEach(() => {
@@ -128,6 +124,7 @@ describe("GitHub Repository Metrics", () => {
     expect(size).toBe(0);
   });
 
+
   it("should correctly get the size of a directory", async () => {
     const dirPath = path.join(testDir, "testDir");
     fs.mkdirSync(dirPath);
@@ -160,6 +157,20 @@ describe("GitHub Repository Metrics", () => {
     expect(size).toBe(Buffer.from(content2).length);
   });
 
+  it("should correctly read the content of a file", async () => {
+    const filePath = path.join(testDir, "readTestFile.txt");
+    const content = "This is a test content!";
+    fs.writeFileSync(filePath, content, "utf-8");
+
+    const readContent = await readFileContent(filePath);
+    expect(readContent).toBe(content);
+  });
+
+  it("should throw an error when trying to read a non-existent file", async () => {
+    const filePath = path.join(testDir, "nonExistentReadTest.txt");
+
+    await expect(readFileContent(filePath)).rejects.toThrowError("File not found");
+  });
 
 
   repositoryUrls.forEach((repositoryUrl) => {

@@ -1,14 +1,19 @@
 #!/bin/sh
 
+# : ${GITHUB_TOKEN:="default_token_value"}
+# : ${LOG_LEVEL:="default_log_level"}
+# : ${LOG_FILE:="default_log_file_path"}
 # Load the variables from .env
-set -a
-. .env
-set +a
+if [ -f .env ]; then
+    set -a
+    . .env
+    set +a
+fi
 
-# Explicitly set each variable
-export GITHUB_TOKEN=$GITHUB_TOKEN
-export LOG_LEVEL=$LOG_LEVEL
-export LOG_FILE=$LOG_FILE
+# # Explicitly set each variable
+# export GITHUB_TOKEN=$GITHUB_TOKEN
+# export LOG_LEVEL=$LOG_LEVEL
+# export LOG_FILE=$LOG_FILE
 
 if [ -z "$LOG_FILE" ]; then
     # echo "LOG_FILE environment variable is not set or is an empty string."

@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --json --outputFile=test_output.json > /dev/null 2>&1"
-  }
-  , 
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/RomanczuG/project-mateusz.git"
@@ -29,6 +28,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "ansi-regex": "^6.0.1",
     "axios": "^1.5.0",
     "commander": "^11.0.0",
     "dotenv": "^16.3.1",
