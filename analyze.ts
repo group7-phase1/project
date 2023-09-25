@@ -58,7 +58,7 @@ export async function analyzeDependencies(URL_FILE: string) {
                     
                     const scores = {
                         URL: url,
-                        NET_SCORE: 1,
+                        NET_SCORE: parseFloat(((rampUpResult + CorrectnessResult + BusFactorResult + ResponsiveMaintainerResult) / 4).toFixed(1)),
                         RAMP_UP_SCORE: rampUpResult,
                         CORRECTNESS_SCORE: CorrectnessResult,
                         BUS_FACTOR_SCORE: BusFactorResult,
@@ -84,7 +84,7 @@ export async function analyzeDependencies(URL_FILE: string) {
 
                 const scores = {
                     URL: url,
-                    NET_SCORE: 1,
+                    NET_SCORE: parseFloat(((rampUpResult + CorrectnessResult + BusFactorResult + ResponsiveMaintainerResult) / 4).toFixed(1)),
                     RAMP_UP_SCORE: rampUpResult,
                     CORRECTNESS_SCORE: CorrectnessResult,
                     BUS_FACTOR_SCORE: BusFactorResult,
