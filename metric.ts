@@ -346,7 +346,7 @@ export async function rampUp(repositoryUrl: string): Promise<number> {
   try {
     const tempDir = tmp.dirSync({ unsafeCleanup: true, prefix: 'temp-' });
     const localDir = await cloneRepository(repositoryUrl); // Call cloneRepository instead of rampUp
-    console.log("Local Dir:", localDir);
+    
 
     if (!localDir) {
       throw new Error('Failed to clone repository');
@@ -361,7 +361,7 @@ export async function rampUp(repositoryUrl: string): Promise<number> {
     let readmeSize = 0;
     for (const readmePath of readmePaths) {
       try {
-        console.log("Getting file size: ", readmePath);
+        
         logger.debug("Getting file size: ", readmePath);
         readmeSize = await getFileSize(readmePath);
         break; // If a valid README file is found, exit the loop
