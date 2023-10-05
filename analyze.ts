@@ -30,6 +30,12 @@ const logger = winston.createLogger({
 
 import { busFactor, correctness, license, rampUp, responsiveMaintainer } from './metric';
 
+function checkForInvalidNumber(value: number | null): number {
+    if (value === null || isNaN(value)) {
+        return -1;
+    }
+    return value;
+}
 
 
 export async function analyzeDependencies(URL_FILE: string) {
@@ -48,17 +54,28 @@ export async function analyzeDependencies(URL_FILE: string) {
                 const data = await fetchNpmDataWithAxios(packageName);
                 const repositoryUrl = getGithubUrlFromNpmData(data);
                 if (repositoryUrl) {
+                    // const newUrl = repositoryUrl.replace('github.com', 'api.github.com/repos');
+                    // const rampUpResult = await rampUp(newUrl);
+                    // const CorrectnessResult = await correctness(newUrl);
+                    // const BusFactorResult = await busFactor(newUrl);
+                    // const ResponsiveMaintainerResult = await responsiveMaintainer(newUrl);
+                    // const LicenseResult = await license(newUrl);
                     const newUrl = repositoryUrl.replace('github.com', 'api.github.com/repos');
-                    const rampUpResult = await rampUp(newUrl);
-                    const CorrectnessResult = await correctness(newUrl);
-                    const BusFactorResult = await busFactor(newUrl);
-                    const ResponsiveMaintainerResult = await responsiveMaintainer(newUrl);
-                    const LicenseResult = await license(newUrl);
+                    const rampUpResult = checkForInvalidNumber(await rampUp(newUrl));
+                    const CorrectnessResult = checkForInvalidNumber(await correctness(newUrl));
+                    const BusFactorResult = checkForInvalidNumber(await busFactor(newUrl));
+                    const ResponsiveMaintainerResult = checkForInvalidNumber(await responsiveMaintainer(newUrl));
+                    const LicenseResult = checkForInvalidNumber(await license(newUrl));
+                    const rawNetScore = (rampUpResult + CorrectnessResult + BusFactorResult + ResponsiveMaintainerResult) / 4;
+                    let finalNetScore = parseFloat(rawNetScore.toFixed(1));
+                    if (finalNetScore < 0) {
+                        finalNetScore = 0;
+                    }
     
                     
                     const scores = {
                         URL: url,
-                        NET_SCORE: parseFloat(((rampUpResult + CorrectnessResult + BusFactorResult + ResponsiveMaintainerResult) / 4).toFixed(1)),
+                        NET_SCORE: finalNetScore,
                         RAMP_UP_SCORE: rampUpResult,
                         CORRECTNESS_SCORE: CorrectnessResult,
                         BUS_FACTOR_SCORE: BusFactorResult,
@@ -76,15 +93,25 @@ export async function analyzeDependencies(URL_FILE: string) {
                 logger.debug('GitHub URL found:', url);
                 const newUrl = url.replace('github.com', 'api.github.com/repos');
                 logger.debug('New URL:', newUrl);
-                const rampUpResult = await rampUp(newUrl);
-                const CorrectnessResult = await correctness(newUrl);
-                const BusFactorResult = await busFactor(newUrl);
-                const ResponsiveMaintainerResult = await responsiveMaintainer(newUrl);
-                const LicenseResult = await license(newUrl);
+                // const rampUpResult = await rampUp(newUrl);
+                // const CorrectnessResult = await correctness(newUrl);
+                // const BusFactorResult = await busFactor(newUrl);
+                // const ResponsiveMaintainerResult = await responsiveMaintainer(newUrl);
+                // const LicenseResult = await license(newUrl);
+                const rampUpResult = checkForInvalidNumber(await rampUp(newUrl));
+                const CorrectnessResult = checkForInvalidNumber(await correctness(newUrl));
+                const BusFactorResult = checkForInvalidNumber(await busFactor(newUrl));
+                const ResponsiveMaintainerResult = checkForInvalidNumber(await responsiveMaintainer(newUrl));
+                const LicenseResult = checkForInvalidNumber(await license(newUrl));
+                const rawNetScore = (rampUpResult + CorrectnessResult + BusFactorResult + ResponsiveMaintainerResult) / 4;
+                let finalNetScore = parseFloat(rawNetScore.toFixed(1));
+                if (finalNetScore < 0) {
+                    finalNetScore = 0;
+                }
 
                 const scores = {
                     URL: url,
-                    NET_SCORE: parseFloat(((rampUpResult + CorrectnessResult + BusFactorResult + ResponsiveMaintainerResult) / 4).toFixed(1)),
+                    NET_SCORE: finalNetScore,
                     RAMP_UP_SCORE: rampUpResult,
                     CORRECTNESS_SCORE: CorrectnessResult,
                     BUS_FACTOR_SCORE: BusFactorResult,
